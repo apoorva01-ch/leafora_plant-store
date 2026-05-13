@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<style>
+    html {
+  scroll-behavior: smooth;
+}
+  body {
+  background-color: #223a29;/* dark page background */
+  color: #e0e0e0; /* default text color for readability */
+}
+/* Header */
+.header {
+  background: linear-gradient(90deg, #3a8048, #2a5d33); /* premium gradient */
+  padding: 5px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; /* allows wrapping on smaller screens */
+  height: 80px;
+}
+
+/* Logo */
+.header .logo img {
+  height: 80px;
+  width: auto;
+}
+
+/* Main Menu */
+.main-menu {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap; /* ensures dropdowns stack on small screens */
+}
+
+.main-menu a,
+.btn-menu {
+  text-decoration: none;
+  color: #d1f4cf;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.main-menu a:hover,
+.btn-menu:hover {
+  color: #d7f1d7;
+}
+
+/* Home link */
+.home-link {
+  color: #f0f0f0;
+  font-weight: 600;
+}
+
+.home-link:hover {
+  color: #c1f0c1;
+  text-decoration: none;
+}
+
+/* Icons */
+.header-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.header-icons a i {
+  font-size: 1.3rem;
+  color: #f0f0f0;
+  transition: 0.3s;
+}
+
+.header-icons a i:hover {
+  color: #c1f0c1;
+  transform: scale(1.2);
+}
+
+/* Responsive tweaks */
+@media (max-width: 992px) {
+  .header {
+    justify-content: center;
+    height: auto;
+  }
+
+  .main-menu {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .header-icons {
+    width: 100%;
+    justify-content: center;
+    margin-top: 5px;
+  }
+}
+/* Dropdown menu background */
+.dropdown-menu {
+  background-color: #1d3124; /* dark green */
+  border: none;
+}
+
+/* Dropdown items */
+.dropdown-item {
+  color: #d1f4cf; /* light green text */
+  font-weight: 500;
+}
+
+/* Hover effect */
+.dropdown-item:hover {
+  background-color: #3c8a4a;
+  color: white;
+}
+
+/* Active/clicked item */
+.dropdown-item:active {
+  background-color: #276b29;
+  color: white;
+}
+/* header complete */
+/* Product Cards */
+.product-card {
+  background: #e1d4c2;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+}
+
+/* Badge */
+.badge-offer {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: #da3636;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border-radius: 12px;
+  z-index: 2;
+}
+
+/* Product Image */
+.product-img {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e1d4c2;
+  object-fit: cover;
+}
+
+.product-img img {
+  max-height: 180px;
+  object-fit: contain;
+  transition: transform 0.3s;
+}
+
+.product-card:hover .product-img img {
+  transform: scale(1.05);
+}
+
+/* Info */
+.product-info {
+  padding: 15px;
+}
+
+.product-info h5 {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: #2a5d33;
+}
+
+.product-info .price {
+  font-weight: 700;
+  color: #3c8a4a;
+  margin-bottom: 12px;
+}
+
+.btn-add {
+  background-color: #3c8a4a;
+  color: #fff;
+  border: none;
+  padding: 8px 0;
+  width: 100%;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background-color: #276b29;
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .product-card {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-img {
+    height: 180px;
+  }
+}
+/* Garden Styles Scroll */
+/* Scroll Container */
+.garden-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 10px 5px 15px;
+  flex-wrap: nowrap;
+}
+
+/* Card Design */
+.garden-box {
+  min-width: 230px;
+  flex-shrink: 0;
+  background: linear-gradient(145deg, #e1d4c2, #d5c5b0);
+  border-radius: 16px;
+  padding: 20px 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Icon Style */
+.garden-box .icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Title */
+.garden-box h6 {
+  font-weight: 700;
+  color: #2a5d33;
+  margin-bottom: 6px;
+}
+
+/* Text */
+.garden-box p {
+  font-size: 0.9rem;
+  color: #3c5f3c;
+}
+
+/* Hover Effect */
+.garden-box:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+}
+
+/* Glow Effect on Hover */
+.garden-box::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(60,138,74,0.2), transparent 60%);
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.garden-box:hover::before {
+  opacity: 1;
+}
+
+/* Scrollbar */
+.garden-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.garden-scroll::-webkit-scrollbar-thumb {
+  background: #3c8a4a;
+  border-radius: 10px;
+}
+/* Before After */
+.before-after img {
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.before-after img:hover {
+  transform: scale(1.03);
+}
+
+/* Why Outdoor */
+.why-box {
+  background: #e1d4c2;
+  border-radius: 16px;
+  padding: 25px 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  height: 100%;
+}
+
+.why-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+/* Icon styling */
+.why-icon {
+  font-size: 2rem;
+  background: #3c8a4a;
+  color: white;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+}
+
+/* Heading */
+.why-box h6 {
+  margin-top: 10px;
+  color: #2a5d33;
+  font-weight: 700;
+}
+
+/* Text */
+.why-box p {
+  color: #3f6b4a;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+
+
+/* Footer */
+.footer-link {
+  text-decoration: none;
+  color: white;
+}
+
+.footer-link:hover {
+  color: #81c784;
+}
+
+.subscribe-form {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+}
+
+.subscribe-form input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  min-width: 0;
+}
+
+.subscribe-form button {
+  padding: 10px 15px;
+  background-color: #3c8a4a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.modalName{
+  color: #223a29;
+
+}
+</style>
+<body>
+<header class="header">
+  <a href="index.html" class="logo">
+    <img src="../images/logo2-removebg-preview.png" alt="Leafora Logo">
+  </a>
+
+  <nav class="main-menu">
+    <a href="plant.html" class="home-link"><i class="bi bi-house"></i></a>
+    
+    <div class="dropdown">
+      <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">PLANTS</button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="indoorplant.html">Indoor Plants</a></li>
+        <li><a class="dropdown-item" href="outdoorplant.html">Outdoor Plants</a></li>
+      </ul>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">SEEDS</button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="flowerseed.html">Flower Seeds</a></li>
+        <li><a class="dropdown-item" href="vegetableseed.html">Vegetable Seeds</a></li>
+      </ul>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">GARDEN DECOR</button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="bird.html">Bird Houses</a></li>
+        <li><a class="dropdown-item" href="garden.html">Garden Tools</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="header-icons">
+   <a href="#" onclick="openSearch()"><i class="bi bi-search"></i></a>
+    <a href="contact.html"><i class="bi bi-person"></i></a>
+    <a href="#"><i class="bi bi-cart"></i></a>
+  </div>
+</header>
+<!-- header complete -->
+
+<div class="page-banner text-center py-5 rounded" 
+     style="background: url(../images/outdoor-banner.jpg) no-repeat center center; 
+            background-size: cover;
+            color: white;
+            position: relative;">
+
+  <div style="position:absolute; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.4); border-radius: 8px;"></div>
+
+  <div style="position: relative; z-index: 1;">
+    <h1 class="fw-bold">Outdoor Plants</h1>
+    <p>Perfect plants for your garden & balcony</p>
+  </div>
+</div>
+<div id="outdoor-products" class="product-section container my-5">
+  <div class="row g-4">
+
+    <!-- 1 -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="product-card">
+        <div class="badge-offer">20% OFF</div>
+        <div class="product-img">
+          <img src="../images/arcea palm.jpg" alt="Areca Palm">
+        </div>
+        <div class="product-info">
+          <h5>Areca Palm</h5>
+          <p class="price">₹599</p>
+          <button class="btn-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="product-card">
+        <div class="badge-offer">15% OFF</div>
+        <div class="product-img">
+          <img src="../images/hibsicus.jpg" alt="Hibiscus">
+        </div>
+        <div class="product-info">
+          <h5>Hibiscus</h5>
+          <p class="price">₹349</p>
+          <button class="btn-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="product-card">
+        <div class="badge-offer">New</div>
+        <div class="product-img">
+          <img src="../images/bgianvila.jpg" alt="Bougainvillea">
+        </div>
+        <div class="product-info">
+          <h5>Bougainvillea</h5>
+          <p class="price">₹399</p>
+          <button class="btn-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="product-card">
+        <div class="badge-offer">10% OFF</div>
+        <div class="product-img">
+          <img src="../images/rose plant.webp" alt="Rose Plant">
+        </div>
+        <div class="product-info">
+          <h5>Rose Plant</h5>
+          <p class="price">₹299</p>
+          <button class="btn-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="product-card">
+        <div class="badge-offer">30% OFF</div>
+        <div class="product-img">
+          <img src="../images/jade plant.jpg" alt="Jade Plant">
+        </div>
+        <div class="product-info">
+          <h5>Jade Plant</h5>
+          <p class="price">₹249</p>
+          <button class="btn-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="product-card">
+        <div class="badge-offer">Hot</div>
+        <div class="product-img">
+          <img src="../images/bonsai.jpg" alt="Bonsai">
+        </div>
+        <div class="product-info">
+          <h5>Bonsai</h5>
+          <p class="price">₹899</p>
+          <button class="btn-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="product-card">
+        <div class="badge-offer">New</div>
+        <div class="product-img">
+          <img src="../images/outdoor fern.webp" alt="Fern">
+        </div>
+        <div class="product-info">
+          <h5>Outdoor Fern</h5>
+          <p class="price">₹199</p>
+          <button class="btn-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="product-card">
+        <div class="badge-offer">Best Seller</div>
+        <div class="product-img">
+          <img src="../images/snake plant.webp" alt="Snake Plant Outdoor">
+        </div>
+        <div class="product-info">
+          <h5>Snake Plant (Outdoor)</h5>
+          <p class="price">₹299</p>
+          <button class="btn-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- scrol -->
+<div class="container my-5">
+  <h4 style="color:#87b890;">Choose Your Garden Style</h4>
+
+  <div class="garden-scroll mt-3">
+
+    <div class="garden-box">
+      <span class="icon">🌸</span>
+      <h6>Flower Garden</h6>
+      <p>Colorful blooming plants</p>
+    </div>
+
+    <div class="garden-box">
+      <span class="icon">🌿</span>
+      <h6>Minimal Garden</h6>
+      <p>Clean & modern look</p>
+    </div>
+
+    <div class="garden-box">
+      <span class="icon">🌴</span>
+      <h6>Tropical Garden</h6>
+      <p>Lush green vibe</p>
+    </div>
+
+    <div class="garden-box">
+      <span class="icon">🪴</span>
+      <h6>Balcony Setup</h6>
+      <p>Small space plants</p>
+    </div>
+
+    <div class="garden-box">
+      <span class="icon">🌼</span>
+      <h6>Flower Beds</h6>
+      <p>Perfect for gardens</p>
+    </div>
+
+    <div class="garden-box">
+      <span class="icon">🌳</span>
+      <h6>Big Plants</h6>
+      <p>Trees & large plants</p>
+    </div>
+
+  </div>
+</div>
+<!-- befor/after -->
+<div class="container my-5 text-center before-after">
+  <h4 style="color:#87b890;">Transform Your Space</h4>
+  <p>See how plants can completely change your outdoor area</p>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <img src="../images/before.jpeg" 
+     style="height:260px; width:100%; object-fit:cover; border-radius:12px;">
+      <p class="mt-2">Before (Empty Balcony)</p>
+    </div>
+
+    <div class="col-md-6">
+     <img src="../images/after.jpeg" 
+     style="height:260px; width:100%; object-fit:cover; border-radius:12px;">
+      <p class="mt-2">After (Green Setup)</p>
+    </div>
+  </div>
+</div>
+<!-- why outdoor -->
+<div class="container my-5">
+  <h4 style="color:#87b890;" class="text-center fw-bold">
+    Why Choose Outdoor Plants?
+  </h4>
+
+  <div class="row mt-4 g-4">
+
+    <div class="col-md-4">
+      <div class="why-box">
+        <div class="why-icon">🌞</div>
+        <h6>Fresh Air</h6>
+        <p>Improves oxygen & environment</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="why-box">
+        <div class="why-icon">🏡</div>
+        <h6>Beautifies Space</h6>
+        <p>Makes garden & balcony attractive</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="why-box">
+        <div class="why-icon">💚</div>
+        <h6>Low Maintenance</h6>
+        <p>Easy to grow & care</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- center cta button -->
+<div class="text-center my-5">
+  <h4>Transform Your Garden Today 🌿</h4>
+ <a href="#outdoor-products">
+  <button class="btn btn-success px-4 mt-2">Shop All Outdoor Plants</button>
+</a>
+</div>
+
+
+ <!-- footer -->
+    <footer style="background-color: #345c3c; padding: 40px 0; margin-top: 76px;">
+  <div class="container" style="background-color: #1d3124; padding: 40px 20px;">
+
+    <div class="row text-white gy-4">
+
+      <!-- Logo + About -->
+      <div class="col-md-4">
+        <img src="../images/logo2-removebg-preview.png" style="width: 200px;">
+        <p style="margin-top: 10px; font-weight: bold; color: rgb(196,192,192);">
+          We deliver healthy plants <br> with proper care guidance
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-md-2">
+        <p class="fw-bold" style="color: rgb(196,192,192);">QUICK LINKS</p>
+        <p><a href="#" class="footer-link">HOME</a></p>
+        <p><a href="#" class="footer-link">SHOP</a></p>
+        <p><a href="#" class="footer-link">CATEGORIES</a></p>
+        <p><a href="#" class="footer-link">BLOG</a></p>
+        <p><a href="#" class="footer-link">CONTACT</a></p>
+      </div>
+
+      <!-- Customer Service -->
+      <div class="col-md-2">
+        <p class="fw-bold" style="color: rgb(196,192,192);">CUSTOMER SERVICE</p>
+        <p><a href="#" class="footer-link">HELP CENTER</a></p>
+        <p><a href="#" class="footer-link">FAQs</a></p>
+        <p><a href="#" class="footer-link">TRACK ORDER</a></p>
+        <p><a href="#" class="footer-link">RETURN & REFUND</a></p>
+      </div>
+
+      <!-- Policies -->
+      <div class="col-md-2">
+        <p class="fw-bold" style="color: rgb(196,192,192);">OUR POLICIES</p>
+        <p><a href="#" class="footer-link">PRIVACY POLICY</a></p>
+        <p><a href="#" class="footer-link">TERMS & CONDITIONS</a></p>
+        <p><a href="#" class="footer-link">SHIPPING POLICY</a></p>
+        <p><a href="#" class="footer-link">CANCELLATION POLICY</a></p>
+      </div>
+
+      <!-- Contact + Subscribe -->
+      <div class="col-md-2">
+        <p class="fw-bold" style="color: rgb(196,192,192);">CONTACT US</p>
+
+        <p>📧 support@Leafora.com</p>
+        <p>📞 +91 9876543210</p>
+        <p>📍 Mumbai, India</p>
+
+        <hr style="background:white;">
+
+        <p>Get plant care tips & exclusive offers</p>
+
+        <form class="subscribe-form mt-2">
+          <input type="email" placeholder="Enter your email">
+          <button type="submit">Subscribe</button>
+        </form>
+
+        <!-- Social Icons -->
+        <div class="d-flex gap-3 mt-3">
+          <i class="bi bi-instagram"></i>
+          <i class="bi bi-youtube"></i>
+          <i class="bi bi-pinterest"></i>
+          <i class="bi bi-twitter"></i>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Section -->
+    <hr style="background:white; margin-top:30px;">
+
+    <div class="text-center text-white">
+      <img src="../images/WhatsApp_Image_2026-01-13_at_12.05.17_PM-removebg-preview.png" height="120px">
+      <p style="color: rgb(160,153,153); font-weight: bold;">
+        Secure Payments | Pan India Delivery | Fresh & Healthy Plants Guaranteed
+      </p>
+      <p style="color: rgb(160,153,153);">
+        © 2026 Leafora. All rights reserved
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+  </div>
+
+  <!-- Quick View Modal -->
+<div id="quickViewModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;">
+  <div style="background:#dbe3dadf; padding:20px; border-radius:10px; max-width:400px; width:90%; text-align:center; position:relative;">
+    <span id="closeModal" style="position:absolute; top:10px; right:15px; font-size:1.5rem; cursor:pointer; color: black;">&times;</span>
+    <img id="modalImg" src="" alt="Product Image" style="max-width:100%; border-radius:10px; margin-bottom:15px;">
+    <h3 id="modalName" style="color: #457a55;"></h3>
+    <p id="modalPrice" style="color:rgb(35, 86, 35); font-weight:bold;"></p>
+    <button style="background:#2a5d33; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">Add to Cart</button>
+  </div>
+</div>
+
+<script>
+  const productCards = document.querySelectorAll('.product-card');
+  const modal = document.getElementById('quickViewModal');
+  const closeModal = document.getElementById('closeModal');
+  const modalImg = document.getElementById('modalImg');
+  const modalName = document.getElementById('modalName');
+  const modalPrice = document.getElementById('modalPrice');
+
+  productCards.forEach(card => {
+    card.addEventListener('click', () => {
+      modal.style.display = 'flex';
+      modalImg.src = card.querySelector('img').src;
+      modalName.innerText = card.querySelector('h5').innerText;
+      modalPrice.innerText = card.querySelector('p').innerText;
+    });
+  });
+
+  closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  // Close modal if clicked outside
+  window.addEventListener('click', (e) => {
+    if(e.target == modal){
+      modal.style.display = 'none';
+    }
+  });
+</script>
+<script>
+  function openSearch() {
+  document.getElementById("searchBox").style.display = "flex";
+}
+
+function closeSearch() {
+  document.getElementById("searchBox").style.display = "none";
+  document.getElementById("searchInput").value = "";
+  document.querySelectorAll(".product-card").forEach(card => {
+    card.closest("[class*='col-']").style.display = "";
+  });
+}
+
+function searchProduct() {
+  let input = document.getElementById("searchInput").value.toLowerCase().trim();
+
+  if (input === "") {
+    closeSearch();
+    return;
+  }
+
+  document.querySelectorAll(".product-card").forEach(card => {
+    let name = card.querySelector("h5").innerText.toLowerCase();
+    let col = card.closest("[class*='col-']");
+    col.style.display = name.includes(input) ? "" : "none";
+  });
+
+  closeSearch();
+  document.querySelector(".product-section").scrollIntoView({ behavior: "smooth" });
+}
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+    <!-- search -->
+    <div id="searchBox" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; justify-content:center; align-items:center; z-index:9999;">
+  <div style="background:white; padding:30px; border-radius:10px; width:300px;">
+    <input type="text" id="searchInput" placeholder="Search plants..." class="form-control mb-3">
+    <button onclick="searchProduct()" class="btn btn-success w-100">Search</button>
+  </div>
+</div>
+</body>
+
+</html>

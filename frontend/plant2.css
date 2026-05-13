@@ -1,0 +1,89 @@
+.header{
+    background-image: url(bg2.jpg);
+    height: 101vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    
+    
+    
+}
+.overlay{
+     position: absolute;
+top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(9, 9, 9, 0.772); /* change 0.5 for more/less darkness */
+  z-index: 1;
+}
+.dropdowns{
+ margin-top: -158px;
+ margin-left: 719px;
+ font-family: Fang-song;
+letter-spacing: 1px;
+ 
+}
+.imglogo{
+  margin-top: -50px;
+}
+  
+.hcontent{
+    
+    position: relative;
+    z-index: 2;
+    
+}
+
+
+.wrapper{
+  overflow:hidden;
+}
+
+.text{
+  font-size:90px;
+  font-family: Fang-song;
+  /* text-shadow: 4px 4px rgba(65, 123, 65, 0.352); */
+  color:#aaa6a6;
+  opacity:0;
+  transform:translateX(-160px);
+  animation: hernandezSlide 1.1s ease-out forwards;
+  margin-top: 160px;
+  margin-left: -56px;
+  opacity: -1;
+}
+
+@keyframes hernandezSlide{
+  0%{
+    opacity:0;
+    transform:translateX(-160px);
+  }
+  40%{
+    opacity:0.6;
+  }
+  100%{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+.highlight{
+  color: #44732ac6;
+}
+.shopbycategory h1{
+   
+   font-size: 60px;
+   font-family: Fang-song;
+   padding-top: 89px;
+}
+ .overlay1{
+     position: absolute;
+top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(9, 9, 9, 0.849); /* change 0.5 for more/less darkness */
+  z-index: 1;
+  
+ }
+

@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEAFORA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="logo2-removebg-preview.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
+:root {
+  --green-dark: #1d3124;
+  --green-mid: #345c3c;
+  --green-light: #307649;
+  --green-accent: #9dd4a7;
+  --beige: #e1d4c2;
+  --red-badge: #da3636;
+  --text-dark: #173923;
+  --white: #fff;
+  --shadow-soft: 0 8px 40px rgba(0,0,0,0.12);
+  --shadow-lift: 0 20px 60px rgba(0,0,0,0.2);
+  --transition-base: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --radius-card: 16px;
+  --radius-btn: 10px;
+}
+
+/* ============================================
+   PAGE LOADER
+   ============================================ */
+#page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#page-loader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-leaf {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.loader-leaf span {
+  width: 8px;
+  border-radius: 40px;
+  background: var(--green-accent);
+  animation: loaderBounce 1.1s ease-in-out infinite;
+}
+.loader-leaf span:nth-child(1) { height: 24px; animation-delay: 0s; }
+.loader-leaf span:nth-child(2) { height: 38px; animation-delay: 0.15s; }
+.loader-leaf span:nth-child(3) { height: 52px; animation-delay: 0.3s; }
+.loader-leaf span:nth-child(4) { height: 38px; animation-delay: 0.45s; }
+.loader-leaf span:nth-child(5) { height: 24px; animation-delay: 0.6s; }
+
+@keyframes loaderBounce {
+  0%, 100% { transform: scaleY(1); opacity: 0.6; }
+  50%       { transform: scaleY(1.4); opacity: 1; }
+}
+
+/* ============================================
+   GLOBAL RESETS & TYPOGRAPHY
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  background: var(--green-dark);
+  cursor: default;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--green-dark); }
+::-webkit-scrollbar-thumb { background: var(--green-mid); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--green-accent); }
+
+/* ============================================
+   SCROLL REVEAL ANIMATION BASE
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* stagger delays for children */
+.stagger-children > *:nth-child(1) { transition-delay: 0s; }
+.stagger-children > *:nth-child(2) { transition-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { transition-delay: 0.2s; }
+.stagger-children > *:nth-child(4) { transition-delay: 0.3s; }
+.stagger-children > *:nth-child(5) { transition-delay: 0.4s; }
+.stagger-children > *:nth-child(6) { transition-delay: 0.5s; }
+
+/* ============================================
+   HEADER / HERO
+   ============================================ */
+.header {
+  background-image: url(bg2.jpg);
+  min-height: 100vh;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 9, 9, 0.779);
+  z-index: 1;
+}
+
+/* Animated grain overlay for depth */
+.overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.hcontent {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================
+   NAVBAR
+   ============================================ */
+.container-fluid.position-relative.z-2 {
+  padding: 0 24px;
+}
+
+/* Logo hover */
+.imglogo-nav {
+  width: 180px;
+  transition: transform var(--transition-base), filter var(--transition-base);
+  filter: drop-shadow(0 0 12px rgba(157, 212, 167, 0));
+}
+.imglogo-nav:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 16px rgba(157, 212, 167, 0.35));
+}
+
+/* Glassmorphism navbar background on scroll */
+.navbar-glass {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: transparent;
+  transition: background var(--transition-base), backdrop-filter var(--transition-base), box-shadow var(--transition-base);
+  padding: 12px 24px;
+}
+.navbar-glass.scrolled {
+  background: rgba(29, 49, 36, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+}
+
+/* Dropdown buttons */
+.dropdowns .btn.text-white {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: background var(--transition-base), color var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+.dropdowns .btn.text-white::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--green-accent);
+  border-radius: 999px;
+  transition: width var(--transition-base);
+}
+.dropdowns .btn.text-white:hover::after { width: 70%; }
+.dropdowns .btn.text-white:hover { background: rgba(157, 212, 167, 0.1); }
+
+/* Dropdown menu */
+.dropdown-menu {
+  border: 1px solid rgba(157, 212, 167, 0.18);
+  border-radius: 10px;
+  background: rgba(29, 49, 36, 0.94);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  padding: 8px;
+  animation: dropIn 0.25s ease;
+}
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.dropdown-item {
+  color: var(--white) !important;
+  border-radius: 6px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  padding: 9px 14px;
+  transition: background var(--transition-base), padding-left var(--transition-base);
+}
+.dropdown-item:hover {
+  background: rgba(157, 212, 167, 0.15) !important;
+  padding-left: 20px;
+  color: var(--green-accent) !important;
+}
+
+/* Nav icons */
+.nav-icons i {
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: transform var(--transition-spring), color var(--transition-base);
+  position: relative;
+}
+.nav-icons i:hover {
+  transform: scale(1.25) translateY(-2px);
+  color: var(--green-accent) !important;
+}
+
+/* ============================================
+   HERO TEXT
+   ============================================ */
+.wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.text {
+  font-size: clamp(32px, 5vw, 66px);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: #aaa6a6;
+  opacity: 0;
+  transform: translateX(-160px);
+  animation: hernandezSlide 1.1s ease-out 0.5s forwards;
+  margin-top: 160px;
+  margin-left: -56px;
+  line-height: 1.18;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 40px rgba(0,0,0,0.4);
+}
+
+@keyframes hernandezSlide {
+  0%   { opacity: 0; transform: translateX(-160px); }
+  40%  { opacity: 0.6; }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.highlight {
+  color: #90ee90;
+  position: relative;
+  display: inline-block;
+}
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #90ee90, transparent);
+  border-radius: 999px;
+  animation: shimmerLine 2.5s ease-in-out infinite;
+}
+@keyframes shimmerLine {
+  0%, 100% { opacity: 0.4; transform: scaleX(0.5); }
+  50%       { opacity: 1; transform: scaleX(1); }
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: fadeInUp 1s ease 1.8s both;
+}
+.scroll-indicator span {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  font-family: 'DM Sans', sans-serif;
+}
+.scroll-mouse {
+  width: 22px;
+  height: 36px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 999px;
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+.scroll-mouse::before {
+  content: '';
+  width: 3px;
+  height: 8px;
+  background: var(--green-accent);
+  border-radius: 999px;
+  animation: scrollBall 1.6s ease infinite;
+}
+@keyframes scrollBall {
+  0%   { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(12px); opacity: 0; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ============================================
+   BANNER IMAGE
+   ============================================ */
+.banner-img {
+  width: 100%;
+  background-color: var(--green-dark);
+  padding: 2%;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+/* ============================================
+   SHOP BY CATEGORY
+   ============================================ */
+.shopbycategory {
+  background: linear-gradient(180deg, #1d3124, #345c3c);
+  padding: 80px 0;
+}
+
+.shopbycategory h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.shopbycategory hr {
+  width: 60px !important;
+  height: 3px !important;
+  background: var(--green-accent) !important;
+  border: none !important;
+  margin: 16px auto 50px auto !important;
+  border-radius: 999px;
+}
+
+/* Category cards */
+.category-img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  transition: transform var(--transition-spring), box-shadow var(--transition-base);
+  border: 3px solid transparent;
+  box-shadow: 0 0 0 0 rgba(157, 212, 167, 0);
+  will-change: transform;
+}
+
+.category-img:hover {
+  transform: scale(1.1) translateY(-6px);
+  border-color: rgba(157, 212, 167, 0.5);
+  box-shadow: 0 12px 40px rgba(157, 212, 167, 0.25), 0 0 0 4px rgba(157, 212, 167, 0.12);
+}
+
+.category-link {
+  text-decoration: none;
+  color: whitesmoke;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  transition: color var(--transition-base);
+  display: inline-block;
+  position: relative;
+}
+
+.category-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--green-accent);
+  border-radius: 999px;
+  transition: width var(--transition-base);
+}
+
+.category-link:hover { color: #9dd4a7; }
+.category-link:hover::after { width: 100%; }
+
+/* ============================================
+   TOP SELLING PRODUCTS SECTION
+   ============================================ */
+.top-selling-section {
+  background-color: var(--green-mid);
+  padding: 2%;
+}
+
+.top {
+  background-color: var(--beige);
+  min-height: 1220px;
+  padding-top: 4%;
+  padding-bottom: 60px;
+  border-radius: 0;
+  position: relative;
+}
+
+.selling {
+  text-align: center;
+  background-color: var(--green-mid);
+  color: white;
+  font-size: clamp(26px, 4vw, 52px);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 18px 36px;
+  border-radius: 14px;
+  margin: auto;
+  width: fit-content;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+.selling::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Cards container */
+.firstcard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding: 0 20px;
+}
+
+/* ============================================
+   PRODUCT CARD ENHANCEMENTS
+   ============================================ */
+.card {
+  width: 260px;
+  background: #fff;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: transform var(--transition-spring), box-shadow var(--transition-base);
+  min-height: 380px;
+  border: 1px solid rgba(0,0,0,0.06);
+  will-change: transform;
+}
+
+/* Glossy sheen on hover */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.15) 0%,
+    rgba(255,255,255,0) 50%,
+    rgba(255,255,255,0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: 2;
+  pointer-events: none;
+  border-radius: var(--radius-card);
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.025);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.2), 0 8px 24px rgba(52, 92, 60, 0.15);
+}
+.card:hover::before { opacity: 1; }
+
+/* Product image */
+.pimage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+  display: block;
+}
+.card:hover .pimage {
+  transform: scale(1.06);
+}
+
+/* Quick-action overlay on card hover */
+.card-overlay-actions {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(29, 49, 36, 0.55);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: 3;
+  backdrop-filter: blur(3px);
+}
+.card:hover .card-overlay-actions { opacity: 1; }
+
+.overlay-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.92);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: translateY(12px);
+  transition: transform var(--transition-spring), background var(--transition-base);
+  color: var(--green-mid);
+  font-size: 16px;
+}
+.card:hover .overlay-btn {
+  transform: translateY(0);
+}
+.card:hover .overlay-btn:nth-child(2) { transition-delay: 0.05s; }
+.card:hover .overlay-btn:nth-child(3) { transition-delay: 0.1s; }
+.overlay-btn:hover {
+  background: var(--green-mid);
+  color: white;
+  transform: translateY(-2px) scale(1.1) !important;
+}
+
+/* Badge */
+.badge-offer {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--red-badge);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  z-index: 4;
+  box-shadow: 0 3px 12px rgba(218, 54, 54, 0.4);
+  animation: badgePulse 2.5s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 3px 12px rgba(218, 54, 54, 0.4); }
+  50%       { box-shadow: 0 3px 20px rgba(218, 54, 54, 0.7); }
+}
+
+/* Card content */
+.content {
+  padding: 14px 16px;
+}
+
+.content h5 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px !important;
+  font-weight: 600;
+  color: var(--green-light) !important;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.content p {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* Stars */
+.ratings {
+  display: flex;
+  gap: 2px;
+  color: rgb(192, 192, 28);
+  margin-bottom: 4px;
+}
+.ratings svg {
+  transition: transform var(--transition-spring);
+}
+.card:hover .ratings svg:nth-child(odd) {
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   BUTTON ENHANCEMENTS
+   ============================================ */
+.bt1, .bt2 {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: var(--green-mid);
+  color: white;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  margin-top: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  transition: color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-spring);
+  isolation: isolate;
+}
+
+/* Liquid fill on hover */
+.bt1::before, .bt2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--red-badge);
+  transform: translateX(-102%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  border-radius: var(--radius-btn);
+}
+.bt1:hover::before, .bt2:hover::before {
+  transform: translateX(0);
+}
+.bt1:hover, .bt2:hover {
+  color: white;
+  box-shadow: 0 6px 20px rgba(218, 54, 54, 0.4);
+  transform: translateY(-2px);
+}
+.bt1:active, .bt2:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Ripple effect */
+.bt1 .ripple, .bt2 .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: scale(0);
+  animation: rippleEffect 0.6s linear;
+  pointer-events: none;
+}
+@keyframes rippleEffect {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ============================================
+   WHY CHOOSE SECTION
+   ============================================ */
+.why {
+  background-color: var(--green-mid);
+  padding: 60px 20px;
+}
+
+.why h1 {
+  text-align: center;
+  color: white;
+  font-size: clamp(30px, 5vw, 60px);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding-top: 40px;
+  text-shadow: 4px 4px rgb(39, 38, 38);
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* Why cards */
+.why .small {
+  background: var(--beige);
+  padding: 28px 20px;
+  border-radius: 14px;
+  text-align: center;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-spring), box-shadow var(--transition-base);
+  cursor: default;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.why .small::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: 14px;
+}
+
+.why .small:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.why .small img {
+  margin: 0 auto 12px auto;
+  display: block;
+  transition: transform var(--transition-spring);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+}
+.why .small:hover img {
+  transform: scale(1.1) rotate(-3deg);
+}
+
+.head4 {
+  color: #a04f2c;
+  margin-top: 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.p {
+  margin-top: 8px;
+  font-size: 13.5px;
+  color: #5a3a28;
+  line-height: 1.6;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  background-color: var(--green-mid);
+  padding: 2%;
+}
+
+footer .inner-footer {
+  background-color: var(--green-dark);
+  padding: 40px 20px;
+  border-radius: 0;
+}
+
+/* Footer links */
+footer a {
+  text-decoration: none;
+  color: white;
+  transition: color var(--transition-base), padding-left var(--transition-base);
+  display: inline-block;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+}
+footer a:hover {
+  color: var(--green-accent) !important;
+  padding-left: 6px;
+}
+
+footer p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+footer hr {
+  background: rgba(255,255,255,0.2) !important;
+  height: 1px !important;
+  border: none !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+}
+
+/* Subscribe form */
+footer .form-control {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  border-radius: 8px;
+  font-size: 13px;
+  transition: border-color var(--transition-base), background var(--transition-base);
+}
+footer .form-control:focus {
+  background: rgba(255,255,255,0.12);
+  border-color: var(--green-accent);
+  color: white;
+  box-shadow: 0 0 0 3px rgba(157, 212, 167, 0.18);
+  outline: none;
+}
+footer .form-control::placeholder { color: rgba(255,255,255,0.4); }
+
+footer .btn-outline-success {
+  border-color: var(--green-accent);
+  color: var(--green-accent);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all var(--transition-base);
+}
+footer .btn-outline-success:hover {
+  background: var(--green-accent);
+  color: var(--green-dark);
+}
+
+/* Social icons */
+.social-icons a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white !important;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background var(--transition-base), transform var(--transition-spring);
+  padding-left: 0 !important;
+}
+.social-icons a:hover {
+  background: var(--green-accent);
+  color: var(--green-dark) !important;
+  transform: translateY(-4px) scale(1.1);
+}
+
+/* Footer headings */
+.footer-heading {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase;
+  color: var(--green-accent) !important;
+  margin-bottom: 16px !important;
+}
+
+/* Footer bottom */
+.footer-bottom-text {
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+/* Payment image */
+.payment-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 0 auto;
+  display: block;
+}
+
+/* ============================================
+   MOBILE MENU
+   ============================================ */
+.navbar-toggler {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  transition: background var(--transition-base);
+}
+.navbar-toggler:hover { background: rgba(255,255,255,0.18); }
+
+.mobile-menu-inner {
+  background: rgba(29, 49, 36, 0.96) !important;
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(157, 212, 167, 0.15);
+}
+.mobile-menu-inner p {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin: 0;
+}
+.mobile-menu-inner p:last-of-type { border-bottom: none; }
+
+/* ============================================
+   SECTION DIVIDER
+   ============================================ */
+.section-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--green-accent), transparent);
+  border-radius: 999px;
+  margin: 12px auto 40px auto;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 992px) {
+  .card { width: 45%; }
+  .why .small { min-height: auto; }
+  .header { background-attachment: scroll; }
+}
+
+@media (max-width: 576px) {
+  .card { width: 90%; }
+  .firstcard { gap: 20px !important; }
+  .text { margin-top: 100px; margin-left: 0; }
+  footer .col-md-4, footer .col-md-2 { width: 100%; margin-top: 20px !important; text-align: left; }
+  footer .form { justify-content: center; }
+  footer img { max-width: 100%; height: auto; }
+}
+
+/* ============================================
+   TOOLTIP (wishlist / cart)
+   ============================================ */
+.overlay-btn[data-tip] {
+  position: relative;
+}
+.overlay-btn[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.overlay-btn[data-tip]:hover::after { opacity: 1; }
+
+/* ============================================
+   FLOATING BACK TO TOP BUTTON
+   ============================================ */
+#backToTop {
+  position: fixed;
+  bottom: 32px;
+  right: 28px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--green-mid);
+  color: white;
+  border: 2px solid rgba(157, 212, 167, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition: all var(--transition-base);
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+#backToTop.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+#backToTop:hover {
+  background: var(--green-accent);
+  color: var(--green-dark);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(157, 212, 167, 0.35);
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--green-accent), #90ee90);
+  z-index: 9998;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE LOADER ===== -->
+<div id="page-loader">
+  <div class="loader-leaf">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- ===== SCROLL PROGRESS ===== -->
+<div id="scroll-progress"></div>
+
+<!-- ===== BACK TO TOP ===== -->
+<button id="backToTop" aria-label="Back to top">
+  <i class="bi bi-arrow-up"></i>
+</button>
+
+<!-- ===========================
+     HEADER
+============================== -->
+<header class="header">
+  <div class="overlay"></div>
+  <div class="hcontent">
+    <div class="container-fluid position-relative z-2">
+
+      <div class="d-flex justify-content-between align-items-center pt-3 dropdowns">
+
+        <!-- Logo -->
+        <img src="logo2-removebg-preview.png" class="img-fluid imglogo-nav" style="width:180px;" loading="lazy">
+
+        <!-- Toggle button (mobile) -->
+        <button class="navbar-toggler d-md-none text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
+          ☰
+        </button>
+
+        <!-- Desktop Menu -->
+        <div class="d-none d-md-flex gap-4 align-items-center">
+
+          <div class="dropdown">
+            <button class="btn text-white dropdown-toggle" data-bs-toggle="dropdown">PLANTS</button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Indoor Plants</a></li>
+              <li><a class="dropdown-item" href="#">Outdoor Plants</a></li>
+            </ul>
+          </div>
+
+          <div class="dropdown">
+            <button class="btn text-white dropdown-toggle" data-bs-toggle="dropdown">SEEDS</button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Flower Seeds</a></li>
+              <li><a class="dropdown-item" href="#">Vegetable Seeds</a></li>
+            </ul>
+          </div>
+
+          <div class="dropdown">
+            <button class="btn text-white dropdown-toggle" data-bs-toggle="dropdown">GARDEN DECOR</button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Bird Houses</a></li>
+              <li><a class="dropdown-item" href="#">Garden Tools</a></li>
+            </ul>
+          </div>
+
+          <div class="d-flex gap-4 text-white nav-icons">
+            <i class="bi bi-search fs-4"></i>
+            <i class="bi bi-person fs-4"></i>
+            <i class="bi bi-cart fs-4"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class="collapse d-md-none mt-3" id="mainMenu">
+        <div class="mobile-menu-inner">
+          <p>PLANTS</p>
+          <p>SEEDS</p>
+          <p>GARDEN DECOR</p>
+          <div class="d-flex gap-3 text-white mt-3 nav-icons">
+            <i class="bi bi-search"></i>
+            <i class="bi bi-person"></i>
+            <i class="bi bi-cart"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Text -->
+      <div class="wrapper">
+        <h1 class="text display-4 fw-bold">
+          GROW YOUR WORLD <br>
+          <span class="highlight">WITH OUR </span> <br> PLANTS!!!
+        </h1>
+      </div>
+
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <div class="scroll-mouse"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===========================
+     BANNER IMAGE
+============================== -->
+<img src="Group_1000011142_1.webp" class="banner-img reveal" loading="lazy">
+
+<!-- ===========================
+     SHOP BY CATEGORY
+============================== -->
+<div class="shopbycategory py-5">
+  <div class="container text-center">
+    <h1 class="text-white mb-2 reveal">SHOP BY CATEGORY</h1>
+    <hr class="mx-auto mb-5 reveal" style="width:50%; height:4px; background:#9dd4a7; border:none;">
+
+    <div class="row g-4 justify-content-center stagger-children">
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center reveal">
+        <img src="indoorplants.jpg" class="img-fluid rounded-circle category-img" loading="lazy">
+        <p class="mt-3"><a href="#" class="category-link">Indoor Plants</a></p>
+      </div>
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center reveal">
+        <img src="outdoorplants.jpg" class="img-fluid rounded-circle category-img" loading="lazy">
+        <p class="mt-3"><a href="#" class="category-link">Outdoor Plants</a></p>
+      </div>
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center reveal">
+        <img src="vegetable seed.jpg" class="img-fluid rounded-circle category-img" loading="lazy">
+        <p class="mt-3"><a href="#" class="category-link">Vegetable Seeds</a></p>
+      </div>
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center reveal">
+        <img src="flower seed.jpg" class="img-fluid rounded-circle category-img" loading="lazy">
+        <p class="mt-3"><a href="#" class="category-link">Flower Seeds</a></p>
+      </div>
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center reveal">
+        <img src="bird houses.jpg" class="img-fluid rounded-circle category-img" loading="lazy">
+        <p class="mt-3"><a href="#" class="category-link">Bird Houses</a></p>
+      </div>
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center reveal">
+        <img src="garden tools.jpg" class="img-fluid rounded-circle category-img" loading="lazy">
+        <p class="mt-3"><a href="#" class="category-link">Garden Tools</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+     TOP SELLING PRODUCTS
+============================== -->
+<div class="top-selling-section">
+  <div class="top">
+    <h2 class="selling reveal">TOP SELLING PRODUCTS</h2>
+
+    <!-- Row 1 -->
+    <div class="firstcard" style="gap: 30px; justify-content: center; margin-top: 56px;">
+
+      <!-- Card 1 -->
+      <div class="card reveal">
+        <img src="plant1.webp" class="pimage" loading="lazy">
+        <div class="card-overlay-actions">
+          <button class="overlay-btn" data-tip="Wishlist"><i class="bi bi-heart"></i></button>
+          <button class="overlay-btn" data-tip="Quick View"><i class="bi bi-eye"></i></button>
+          <button class="overlay-btn" data-tip="Add to Cart"><i class="bi bi-cart-plus"></i></button>
+        </div>
+        <div class="badge-offer">20% OFF</div>
+        <div class="content">
+          <h5 style="color: #307649;font-size: 20px; font-weight: bold;">Amsterdam Muse Fiberglass Planter</h5>
+          <p style="color: #173923; font-weight: bold;">₹6,499 <del style="color: rgb(121, 9, 9); font-weight: lighter;">₹9,999</del></p>
+          <div class="ratings" style="display: flex; color: rgb(192, 192, 28);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </div>
+          <button class="bt1">View More</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card reveal">
+        <img src="plant 3.webp" class="pimage" loading="lazy">
+        <div class="card-overlay-actions">
+          <button class="overlay-btn" data-tip="Wishlist"><i class="bi bi-heart"></i></button>
+          <button class="overlay-btn" data-tip="Quick View"><i class="bi bi-eye"></i></button>
+          <button class="overlay-btn" data-tip="Add to Cart"><i class="bi bi-cart-plus"></i></button>
+        </div>
+        <div class="badge-offer">15% OFF</div>
+        <div class="content">
+          <h5 style="color: #307649;font-size: 20px; font-weight: bold;">Kyari Lightweight & Durable Polymer Planter</h5>
+          <p style="color: #173923; font-weight: bold;">₹2,225 <del style="color: rgb(121, 9, 9); font-weight: lighter;">₹2,999</del></p>
+          <div class="ratings" style="display: flex; color: rgb(192, 192, 28);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </div>
+          <button class="bt1">View More</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card reveal">
+        <img src="plant 5.webp" class="pimage" loading="lazy">
+        <div class="card-overlay-actions">
+          <button class="overlay-btn" data-tip="Wishlist"><i class="bi bi-heart"></i></button>
+          <button class="overlay-btn" data-tip="Quick View"><i class="bi bi-eye"></i></button>
+          <button class="overlay-btn" data-tip="Add to Cart"><i class="bi bi-cart-plus"></i></button>
+        </div>
+        <div class="badge-offer">20% OFF</div>
+        <div class="content">
+          <h5 style="color: #307649;font-size: 20px; font-weight: bold;">Sydney Silhouette Fiberglass Planter</h5>
+          <p style="color: #173923; font-weight: bold;">₹3,499 <del style="color: rgb(121, 9, 9); font-weight: lighter;">₹5,499</del></p>
+          <div class="ratings" style="display: flex; color: rgb(192, 192, 28);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </div>
+          <button class="bt1">View More</button>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card reveal">
+        <img src="plant 9.webp" class="pimage" loading="lazy">
+        <div class="card-overlay-actions">
+          <button class="overlay-btn" data-tip="Wishlist"><i class="bi bi-heart"></i></button>
+          <button class="overlay-btn" data-tip="Quick View"><i class="bi bi-eye"></i></button>
+          <button class="overlay-btn" data-tip="Add to Cart"><i class="bi bi-cart-plus"></i></button>
+        </div>
+        <div class="badge-offer">10% OFF</div>
+        <div class="content">
+          <h5 style="color: #307649;font-size: 20px; font-weight: bold;">Areca Palm Plant - Indoor Air Pufier Plant</h5>
+          <p style="color: #173923; font-weight: bold;">₹299 <del style="color: rgb(121, 9, 9); font-weight: lighter;">₹349</del></p>
+          <div class="ratings" style="display: flex; color: rgb(192, 192, 28);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </div>
+          <button class="bt1">View More</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 2 -->
+    <div class="firstcard" style="gap: 30px; justify-content: center; margin-top: 40px;">
+
+      <!-- Card 5 -->
+      <div class="card reveal">
+        <img src="plant 4.webp" class="pimage" loading="lazy">
+        <div class="card-overlay-actions">
+          <button class="overlay-btn" data-tip="Wishlist"><i class="bi bi-heart"></i></button>
+          <button class="overlay-btn" data-tip="Quick View"><i class="bi bi-eye"></i></button>
+          <button class="overlay-btn" data-tip="Add to Cart"><i class="bi bi-cart-plus"></i></button>
+        </div>
+        <div class="badge-offer">5% OFF</div>
+        <div class="content">
+          <h5 style="color: #307649;font-size: 20px; font-weight: bold;">Aglaonema Lipstick Plant With Self Watering Pot</h5>
+          <p style="color: #173923; font-weight: bold;">₹399 <del style="color: rgb(121, 9, 9); font-weight: lighter;">₹599</del></p>
+          <div class="ratings" style="display: flex; color: rgb(192, 192, 28);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </div>
+          <button class="bt1">View More</button>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="card reveal">
+        <img src="plant2.webp" class="pimage" loading="lazy">
+        <div class="card-overlay-actions">
+          <button class="overlay-btn" data-tip="Wishlist"><i class="bi bi-heart"></i></button>
+          <button class="overlay-btn" data-tip="Quick View"><i class="bi bi-eye"></i></button>
+          <button class="overlay-btn" data-tip="Add to Cart"><i class="bi bi-cart-plus"></i></button>
+        </div>
+        <div class="badge-offer">20% OFF</div>
+        <div class="content">
+          <h5 style="color: #307649;font-size: 20px; font-weight: bold;">Crassula Ovata Plant</h5>
+          <p style="color: #173923; font-weight: bold;">₹199 <del style="color: rgb(121, 9, 9); font-weight: lighter;">₹399</del></p>
+          <div class="ratings" style="display: flex; color: rgb(192, 192, 28);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </div>
+          <button class="bt2">View More</button>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="card reveal">
+        <img src="plant7.webp" class="pimage" loading="lazy">
+        <div class="card-overlay-actions">
+          <button class="overlay-btn" data-tip="Wishlist"><i class="bi bi-heart"></i></button>
+          <button class="overlay-btn" data-tip="Quick View"><i class="bi bi-eye"></i></button>
+          <button class="overlay-btn" data-tip="Add to Cart"><i class="bi bi-cart-plus"></i></button>
+        </div>
+        <div class="badge-offer">5% OFF</div>
+        <div class="content">
+          <h5 style="color: #307649;font-size: 20px; font-weight: bold;">Golden Money Plant With Self Watering Pot</h5>
+          <p style="color: #173923; font-weight: bold;">₹349 <del style="color: rgb(121, 9, 9); font-weight: lighter;">₹499</del></p>
+          <div class="ratings" style="display: flex; color: rgb(192, 192, 28);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </div>
+          <button class="bt1">View More</button>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="card reveal">
+        <img src="plant 10.webp" class="pimage" loading="lazy">
+        <div class="card-overlay-actions">
+          <button class="overlay-btn" data-tip="Wishlist"><i class="bi bi-heart"></i></button>
+          <button class="overlay-btn" data-tip="Quick View"><i class="bi bi-eye"></i></button>
+          <button class="overlay-btn" data-tip="Add to Cart"><i class="bi bi-cart-plus"></i></button>
+        </div>
+        <div class="badge-offer">10% OFF</div>
+        <div class="content">
+          <h5 style="color: #307649;font-size: 20px; font-weight: bold;">Haworthia Attenuata Succulent Plant</h5>
+          <p style="color: #173923; font-weight: bold;">₹299 <del style="color: rgb(121, 9, 9); font-weight: lighter;">₹349</del></p>
+          <div class="ratings" style="display: flex; color: rgb(192, 192, 28);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </div>
+          <button class="bt1">View More</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+     WHY CHOOSE LEAFORA
+============================== -->
+<div class="why" style="background-color:#345c3c; padding:60px 20px;">
+  <h1 class="reveal">WHY CHOOSE LEAFORA?</h1>
+  <div class="section-divider reveal"></div>
+
+  <div class="container mt-3">
+    <div class="row g-4 justify-content-center stagger-children">
+
+      <div class="col-12 col-sm-6 col-lg-3 reveal">
+        <div class="small text-center">
+          <img src="self watering plants.svg" loading="lazy">
+          <h4 class="head4">Self Watering Planters</h4>
+          <p class="p">Designed for ease and elegance.</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3 reveal">
+        <div class="small text-center">
+          <img src="aesthic desgin.svg" loading="lazy">
+          <h4 class="head4">Aesthetic Designs</h4>
+          <p class="p">Stylish planters to match modern interiors.</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3 reveal">
+        <div class="small text-center">
+          <img src="innovative plant care.svg" loading="lazy">
+          <h4 class="head4">Innovative Plant Care</h4>
+          <p class="p">Let your customers know about local pickup</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3 reveal">
+        <div class="small text-center">
+          <img src="healthy plants.svg" loading="lazy">
+          <h4 class="head4">Healthy Plants</h4>
+          <p class="p">Handpicked and nurtured for 3 months.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+     FOOTER
+============================== -->
+<footer style="background-color:#345c3c; padding:2%;">
+  <div class="inner-footer" style="background-color:#1d3124; padding:40px 20px;">
+    <div class="container">
+      <div class="row text-white">
+
+        <!-- Logo -->
+        <div class="col-lg-4 col-md-6 mb-4 reveal-left">
+          <img src="logo2-removebg-preview.png" style="width:220px;" loading="lazy">
+          <p style="color:rgb(196,192,192); font-weight:bold; margin-top:10px;">
+            We deliver healthy plants <br> with proper care guidance
+          </p>
+        </div>
+
+        <!-- Quick links -->
+        <div class="col-lg-2 col-md-6 mb-4 reveal">
+          <p class="footer-heading">QUICK LINKS</p>
+          <p><a href="#">HOME</a></p>
+          <p><a href="#">SHOP</a></p>
+          <p><a href="#">CATEGORIES</a></p>
+          <p><a href="#">BLOG</a></p>
+          <p><a href="#">CONTACT</a></p>
+        </div>
+
+        <!-- Customer service -->
+        <div class="col-lg-2 col-md-6 mb-4 reveal">
+          <p class="footer-heading">CUSTOMER SERVICE</p>
+          <p><a href="#">HELP CENTER</a></p>
+          <p><a href="#">FAQs</a></p>
+          <p><a href="#">TRACK ORDER</a></p>
+          <p><a href="#">RETURN & REFUND</a></p>
+        </div>
+
+        <!-- Policies -->
+        <div class="col-lg-2 col-md-6 mb-4 reveal">
+          <p class="footer-heading">OUR POLICIES</p>
+          <p><a href="#">PRIVACY POLICY</a></p>
+          <p><a href="#">TERMS & CONDITIONS</a></p>
+          <p><a href="#">SHIPPING POLICY</a></p>
+          <p><a href="#">CANCELLATION POLICY</a></p>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-lg-2 col-md-6 mb-4 reveal-right">
+          <p class="footer-heading">CONTACT US</p>
+          <p style="color:white;">support@Leafora.com</p>
+          <p style="color:white;">+91 9876543210</p>
+          <p style="color:white;">Mumbai, India</p>
+          <hr>
+          <p>Get plant care tips & exclusive offers</p>
+          <form class="d-flex gap-2" onsubmit="return false;">
+            <input class="form-control" type="email" placeholder="Enter your email">
+            <button class="btn btn-outline-success">Subscribe</button>
+          </form>
+          <div class="social-icons d-flex gap-2 mt-3">
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+            <a href="#" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
+            <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+          </div>
+        </div>
+
+      </div>
+
+      <hr style="background:rgba(255,255,255,0.15); height:1px; border:none; margin-top:30px;">
+
+      <div class="text-center reveal">
+        <img src="WhatsApp_Image_2026-01-13_at_12.05.17_PM-removebg-preview.png" class="payment-img" style="max-height:120px;" loading="lazy">
+        <p class="footer-bottom-text mt-3" style="color:rgb(160,153,153); font-weight:bold;">
+          Secure Payments | Pan India Delivery | Fresh & Healthy Plants Guaranteed
+        </p>
+        <p class="footer-bottom-text" style="color:rgb(160,153,153);">
+          © 2026 Leafora. All rights reserved
+        </p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script>
+/* ============================================
+   PAGE LOADER
+   ============================================ */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('page-loader').classList.add('loaded');
+  }, 900);
+});
+
+/* ============================================
+   SCROLL PROGRESS BAR
+   ============================================ */
+const progressBar = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  progressBar.style.width = (scrollTop / scrollHeight * 100) + '%';
+}, { passive: true });
+
+/* ============================================
+   BACK TO TOP BUTTON
+   ============================================ */
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('show', window.scrollY > 400);
+}, { passive: true });
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ============================================
+   INTERSECTION OBSERVER — SCROLL REVEAL
+   ============================================ */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+  revealObserver.observe(el);
+});
+
+/* ============================================
+   NAVBAR GLASS ON SCROLL
+   ============================================ */
+const navbarEl = document.querySelector('.container-fluid.position-relative.z-2');
+if (navbarEl) {
+  window.addEventListener('scroll', () => {
+    navbarEl.classList.toggle('navbar-glass', window.scrollY > 60);
+    navbarEl.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+}
+
+/* ============================================
+   RIPPLE EFFECT ON BUTTONS
+   ============================================ */
+document.querySelectorAll('.bt1, .bt2').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${e.clientX - rect.left - size / 2}px;
+      top: ${e.clientY - rect.top - size / 2}px;
+    `;
+    this.appendChild(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove());
+  });
+});
+
+/* ============================================
+   LAZY LOADING IMAGES (native fallback)
+   ============================================ */
+if ('loading' in HTMLImageElement.prototype) {
+  // Browser supports native lazy loading — attribute already set
+} else {
+  // Polyfill for older browsers
+  const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+  const lazyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src || img.src;
+        lazyObserver.unobserve(img);
+      }
+    });
+  });
+  lazyImages.forEach(img => lazyObserver.observe(img));
+}
+
+/* ============================================
+   CARD MAGNETIC HOVER EFFECT (subtle tilt)
+   ============================================ */
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('mousemove', function(e) {
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
+    this.style.transform = `translateY(-10px) scale(1.025) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    this.style.transition = 'transform 0.1s ease';
+  });
+
+  card.addEventListener('mouseleave', function() {
+    this.style.transform = '';
+    this.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+  });
+});
+
+/* ============================================
+   WHY CARD ICON ANIMATION ON HOVER
+   ============================================ */
+document.querySelectorAll('.why .small').forEach(card => {
+  card.addEventListener('mouseenter', function() {
+    const img = this.querySelector('img');
+    if (img) {
+      img.style.transform = 'scale(1.1) rotate(-3deg)';
+      img.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    }
+  });
+  card.addEventListener('mouseleave', function() {
+    const img = this.querySelector('img');
+    if (img) {
+      img.style.transform = '';
+    }
+  });
+});
+
+/* ============================================
+   WISHLIST HEART TOGGLE (micro-interaction)
+   ============================================ */
+document.querySelectorAll('.overlay-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const icon = this.querySelector('i');
+    if (icon && icon.classList.contains('bi-heart')) {
+      icon.classList.replace('bi-heart', 'bi-heart-fill');
+      this.style.color = '#da3636';
+      // Bounce animation
+      this.style.transform = 'scale(1.3)';
+      setTimeout(() => { this.style.transform = ''; }, 300);
+    } else if (icon && icon.classList.contains('bi-heart-fill')) {
+      icon.classList.replace('bi-heart-fill', 'bi-heart');
+      this.style.color = '';
+    }
+  });
+});
+
+/* ============================================
+   SUBSCRIBE BUTTON FEEDBACK
+   ============================================ */
+document.querySelectorAll('footer .btn-outline-success').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const input = this.previousElementSibling;
+    if (input && input.value.trim()) {
+      const orig = this.textContent;
+      this.textContent = '✓ Done!';
+      this.style.background = '#9dd4a7';
+      this.style.color = '#1d3124';
+      input.value = '';
+      setTimeout(() => {
+        this.textContent = orig;
+        this.style.background = '';
+        this.style.color = '';
+      }, 2500);
+    }
+  });
+});
+
+/* ============================================
+   STAGGER REVEAL FOR CHILDREN
+   ============================================ */
+document.querySelectorAll('.stagger-children > .reveal').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 0.08}s`;
+});
+</script>
+
+</body>
+</html>
