@@ -763,7 +763,7 @@ $result = getFilteredProducts($conn, 'vegetableseed');
 
       <!-- Logo + About -->
       <div class="col-md-4">
-        <img src="logo2-removebg-preview.png" style="width: 200px;">
+        <img src="../images/logo2-removebg-preview.png" style="width: 200px;">
         <p style="margin-top: 10px; font-weight: bold; color: rgb(196,192,192);">
           We deliver healthy plants <br> with proper care guidance
         </p>
@@ -829,7 +829,7 @@ $result = getFilteredProducts($conn, 'vegetableseed');
     <hr style="background:white; margin-top:30px;">
 
     <div class="text-center text-white">
-      <img src="WhatsApp_Image_2026-01-13_at_12.05.17_PM-removebg-preview.png" height="120px">
+      <img src="../images/WhatsApp_Image_2026-01-13_at_12.05.17_PM-removebg-preview.png" height="120px">
       <p style="color: rgb(160,153,153); font-weight: bold;">
         Secure Payments | Pan India Delivery | Fresh & Healthy Plants Guaranteed
       </p>
