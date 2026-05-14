@@ -38,6 +38,8 @@ while($row = mysqli_fetch_assoc($cart_items)) {
 <html>
 <head>
   <title>Checkout - Leafora</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -82,7 +84,63 @@ while($row = mysqli_fetch_assoc($cart_items)) {
       color: #9dd4a7;
     }
     h2 { color: #1d3124; }
-    label { color: #555; font-weight: 500; }
+    label { color: #555; font-weight: 500; 
+  }
+  /* Mobile Fix */
+@media (max-width: 576px) {
+
+  .container {
+    padding: 20px 12px !important;
+  }
+
+  h2 {
+    font-size: 20px !important;
+  }
+
+  .checkout-box {
+    padding: 18px 15px !important;
+    border-radius: 12px;
+  }
+
+  .order-summary {
+    padding: 18px 15px !important;
+    border-radius: 12px;
+  }
+
+  /* Input fields bade karo - zoom band */
+  .form-control {
+    font-size: 16px !important;
+    padding: 12px !important;
+  }
+
+  label {
+    font-size: 14px !important;
+  }
+
+  .btn-order {
+    font-size: 15px !important;
+    padding: 14px !important;
+  }
+
+  .item-row {
+    font-size: 13px !important;
+  }
+
+  .total-row {
+    font-size: 16px !important;
+  }
+
+  /* Navbar fix */
+  div[style*="padding:15px 30px"] {
+    padding: 10px 15px !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  div[style*="padding:15px 30px"] img {
+    width: 110px !important;
+  }
+}
   </style>
 </head>
 <body>

@@ -273,18 +273,29 @@
   gap: 25px;
   margin-top: 40px;
   padding: 0 20px;
+  align-items: start; /* CARDS DON'T STRETCH TO EQUAL HEIGHT */
 }
 
 @media (max-width: 992px) {
-  .firstcard {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .firstcard { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 576px) {
   .firstcard {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 8px !important;
   }
+  .img-wrapper { height: 130px !important; }
+  .content { padding: 8px !important; gap: 3px !important; }
+  .content h5 { font-size: 12px !important; }
+  .content p { font-size: 11px !important; }
+  .add-to-cart, .view-btn {
+    font-size: 11px !important;
+    padding: 6px 4px !important;
+  }
+  .save { font-size: 10px !important; }
+  .ratings svg { width: 12px !important; height: 12px !important; }
 }
 
 
@@ -518,8 +529,8 @@ color: gold;
 .panel{
 position:fixed;
 top:0;
-right:-400px;
-width:350px;
+right:-110vw;
+width:min(350px, 100vw);
 height:100%;
 background:linear-gradient(180deg,#1d3124,#345c3c);
 color:white;
@@ -575,8 +586,8 @@ font-family:Arial, sans-serif;
 }
 
 .popup-box{
+width:min(450px, 92vw);
 background:white;
-width:450px;
 padding:35px;
 border-radius:15px;
 text-align:center;
@@ -723,6 +734,115 @@ transform:translateX(5px);
   background: linear-gradient(135deg, #2a5d33, #1d3124);
   transform: scale(1.05);
 }
+/* ===== MOBILE RESPONSIVE FIXES ===== */
+
+/* Navbar logo smaller on mobile */
+@media (max-width: 576px) {
+  header img[style*="180px"] {
+    width: 130px !important;
+  }
+}
+
+/* Hero text padding fix on mobile */
+@media (max-width: 576px) {
+  .wrapper {
+    padding-top: 80px !important;
+    padding-bottom: 40px !important;
+  }
+  .text {
+    font-size: clamp(22px, 7vw, 40px) !important;
+  }
+}
+
+/* Category section text */
+@media (max-width: 576px) {
+  .shopbycategory h1 {
+    font-size: 26px;
+  }
+  .category-card img {
+    width: 80px;
+    height: 80px;
+  }
+  .category-card {
+    padding: 14px;
+  }
+  .category-card p {
+    font-size: 13px;
+  }
+}
+
+/* Selling heading responsive */
+@media (max-width: 576px) {
+  .selling {
+    font-size: 22px !important;
+    letter-spacing: 1px;
+    padding: 14px 18px;
+  }
+}
+
+/* Card grid mobile */
+@media (max-width: 576px) {
+  .firstcard {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 0 10px !important;
+  }
+  .card {
+    max-width: 100% !important;
+  }
+  .content h5 {
+    font-size: 13px;
+  }
+  .content p {
+    font-size: 12px;
+  }
+  .add-to-cart, .view-btn {
+    font-size: 12px;
+    padding: 7px;
+  }
+}
+
+/* Cart / Product Panel full screen on very small phones */
+@media (max-width: 400px) {
+  .panel {
+    width: 100vw !important;
+  }
+}
+
+/* Toast position fix on mobile */
+@media (max-width: 576px) {
+  #toast {
+    bottom: 70px;
+    right: 10px;
+    left: 10px;
+    text-align: center;
+  }
+}
+
+/* Footer responsive */
+@media (max-width: 576px) {
+  footer .col-lg-4,
+  footer .col-lg-2 {
+    text-align: center;
+  }
+  footer form {
+    flex-direction: column;
+    gap: 8px;
+  }
+  footer form .btn {
+    width: 100%;
+  }
+  footer input {
+    width: 100%;
+  }
+}
+
+/* Why section cards full width on mobile */
+@media (max-width: 576px) {
+  .why h1 {
+    font-size: 30px !important;
+  }
+}
 </style>
 </head>
 
@@ -739,11 +859,11 @@ transform:translateX(5px);
           <img src="../images/logo2-removebg-preview.png" class="img-fluid" style="width:180px;">
 
           <!-- Toggle button (only mobile) -->
-          <button class="navbar-toggler d-md-none text-white" type="button" data-bs-toggle="collapse"
-            data-bs-target="#mainMenu">
-            ☰
-          </button>
-
+        <button id="hamburgerBtn" class="d-md-none"
+  onclick="toggleHamburger()"
+  style="background:none;border:1px solid white;color:white;padding:5px 12px;border-radius:6px;font-size:20px;cursor:pointer;">
+  ☰
+</button>
           <!-- Desktop Menu -->
           <div class="d-none d-md-flex gap-4 align-items-center">
 
@@ -808,21 +928,88 @@ $count_data = mysqli_fetch_assoc($count_query);
         </div>
 
         <!-- Mobile Menu -->
-        <div class="collapse d-md-none mt-3" id="mainMenu">
-          <div class="bg-dark p-3 rounded">
+        <!-- Mobile Menu -->
+<!-- Mobile Menu -->
+<div id="mainMenu" style="display:none; background:#1d3124; padding:15px; border-radius:10px; margin-top:10px; position:relative; z-index:100;">
+  <!-- Plants -->
+  <div style="border-bottom:1px solid #345c3c; margin-bottom:5px;">
+    <button id="btn-plants"
+     onclick="toggleMobileMenu('sub-plants', this)"
+      style="background:none;border:none;color:white;font-weight:bold;width:100%;text-align:left;padding:10px 0;font-size:15px;cursor:pointer;">
+      🌿 PLANTS <span id="arr-plants" style="float:right;">▼</span>
+    </button>
+    <div id="sub-plants" style="display:none; padding:5px 0 10px 15px;">
+      <a href="indoorplant.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Indoor Plants</a>
+      <a href="outdoorplant.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Outdoor Plants</a>
+    </div>
+  </div>
 
-            <p class="text-white">PLANTS</p>
-            <p class="text-white">SEEDS</p>
-            <p class="text-white">GARDEN DECOR</p>
+  <!-- Seeds -->
+  <div style="border-bottom:1px solid #345c3c; margin-bottom:5px;">
+    <button id="btn-seeds"
+     onclick="toggleMobileMenu('sub-seeds', this)"
+      style="background:none;border:none;color:white;font-weight:bold;width:100%;text-align:left;padding:10px 0;font-size:15px;cursor:pointer;">
+      🌱 SEEDS <span id="arr-seeds" style="float:right;">▼</span>
+    </button>
+    <div id="sub-seeds" style="display:none; padding:5px 0 10px 15px;">
+      <a href="flowerseed.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Flower Seeds</a>
+      <a href="vegetableseed.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Vegetable Seeds</a>
+    </div>
+  </div>
 
-            <div class="d-flex gap-3 text-white">
-              <i class="bi bi-search"></i>
-              <i class="bi bi-person"></i>
-              <i class="bi bi-cart"></i>
-            </div>
+  <!-- Decor -->
+  <div style="border-bottom:1px solid #345c3c; margin-bottom:5px;">
+    <button id="btn-decor"
+     onclick="toggleMobileMenu('sub-decor', this)"
+      style="background:none;border:none;color:white;font-weight:bold;width:100%;text-align:left;padding:10px 0;font-size:15px;cursor:pointer;">
+      🏡 GARDEN DECOR <span id="arr-decor" style="float:right;">▼</span>
+    </button>
+    <div id="sub-decor" style="display:none; padding:5px 0 10px 15px;">
+      <a href="bird.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Bird Houses</a>
+      <a href="garden.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Garden Tools</a>
+    </div>
+  </div>
 
-          </div>
-        </div>
+  <!-- Icons -->
+  <div style="display:flex; flex-wrap:wrap; gap:12px; padding-top:14px; border-top:1px solid #345c3c;">
+
+  <span onclick="openSearch()"
+    style="color:white;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:4px;">
+    <i class="bi bi-search"></i> Search
+  </span>
+
+  <span onclick="openCart()"
+    style="color:white;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:4px;position:relative;">
+    <i class="bi bi-cart"></i> Cart
+    <span id="cart-count-mobile"
+      style="background:#ff4d4d;color:white;font-size:10px;padding:2px 5px;
+             border-radius:50%;position:absolute;top:-8px;right:-8px;">
+      <?= $count_data['total']; ?>
+    </span>
+  </span>
+
+  <a href="wishlist.php"
+    style="color:white;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;">
+    <i class="bi bi-heart"></i> Wishlist
+  </a>
+
+  <a href="contact.php"
+    style="color:white;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;">
+    <i class="bi bi-person"></i> Profile
+  </a>
+
+  <a href="orders.php"
+    style="color:white;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;">
+    <i class="bi bi-clock-history"></i> Orders
+  </a>
+
+  <a href="logout.php"
+    style="color:#ff6b6b;text-decoration:none;font-size:13px;font-weight:bold;display:flex;align-items:center;gap:4px;">
+    <i class="bi bi-box-arrow-right"></i> Logout
+  </a>
+
+</div>
+</div>
         <div class="wrapper">
           <h1 class="text display-4 fw-bold">
             GROW YOUR WORLD <br>
@@ -1126,8 +1313,8 @@ $result = getFilteredProducts($conn, '', true);
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"></script>
 
 <script>
 
@@ -1141,18 +1328,7 @@ function closeCart(){
 }
 
 </script> 
-<script>
-// window.addEventListener("scroll", () => {
-//   document.querySelectorAll(".card").forEach(card => {
-//     let position = card.getBoundingClientRect().top;
-//     let screen = window.innerHeight;
 
-//     if (position < screen - 100) {
-//       card.style.opacity = "1";
-//       card.style.transform = "translateY(0)";
-//     }
-//   });
-// });
 </script>
 <div id="toast" style="
   position: fixed;
@@ -1317,7 +1493,7 @@ align-items:center;
 z-index:9999;
 ">
 
-<div style="background:white; padding:30px; border-radius:10px; width:300px;">
+<div style="background:white; padding:25px; border-radius:10px; width:min(320px, 90vw);">
  <input 
   type="text" 
   id="searchInput" 
@@ -1448,9 +1624,11 @@ function updateCartCount() {
     fetch("cart_count.php")
         .then(res => res.text())
         .then(count => {
-            document.getElementById("cart-count").innerText = count;
+            let d = document.getElementById("cart-count");
+            let m = document.getElementById("cart-count-mobile");
+            if(d) d.innerText = count;
+            if(m) m.innerText = count;
         });
-
 }
 
 </script>
@@ -1483,7 +1661,31 @@ function showToast(message = "✅ Item added to cart!") {
   }, 2500);
 }
 </script>
+<script>
+// Hamburger toggle
 
+function toggleHamburger() {
+  var menu = document.getElementById("mainMenu");
+  if (menu.style.display === "block") {
+    menu.style.display = "none";
+  } else {
+    menu.style.display = "block";
+  }
+}
+
+function toggleMobileMenu(id, btn) {
+  var el = document.getElementById(id);
+  var arrow = btn.querySelector("span");
+  if (el.style.display === "block") {
+    el.style.display = "none";
+    if (arrow) arrow.textContent = "▼";
+  } else {
+    el.style.display = "block";
+    if (arrow) arrow.textContent = "▲";
+  }
+}
+
+</script>
 </body>
 </html>
 

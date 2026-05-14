@@ -12,6 +12,7 @@ $orders = mysqli_query($conn, "SELECT * FROM orders WHERE user_id='$user_id' ORD
 <html>
 <head>
   <title>My Orders - Leafora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -160,6 +161,82 @@ $orders = mysqli_query($conn, "SELECT * FROM orders WHERE user_id='$user_id' ORD
       border-top: 1px solid #f0f0f0;
       margin: 15px 0;
     }
+    /* Mobile Fix */
+@media (max-width: 576px) {
+
+  .navbar-custom {
+    padding: 10px 15px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .navbar-custom img {
+    width: 110px !important;
+  }
+
+  .main {
+    margin: 20px auto;
+    padding: 0 12px;
+  }
+
+  .page-heading {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .order-card {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .order-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .order-id {
+    font-size: 14px;
+  }
+
+  .order-date {
+    font-size: 12px;
+    margin-left: 0 !important;
+    display: block;
+    margin-top: 3px;
+  }
+
+  .order-details {
+    grid-template-columns: 1fr 1fr; /* 2 columns on mobile */
+    gap: 12px;
+  }
+
+  .detail-item label {
+    font-size: 10px;
+  }
+
+  .detail-item p {
+    font-size: 13px;
+  }
+
+  .order-total {
+    font-size: 16px;
+    text-align: left; /* left align on mobile */
+  }
+
+  .empty-box {
+    padding: 50px 15px;
+  }
+
+  .empty-box h3 {
+    font-size: 18px;
+  }
+
+  .btn-shop {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
   </style>
 </head>
 <body>

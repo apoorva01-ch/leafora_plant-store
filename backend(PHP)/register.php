@@ -31,6 +31,7 @@ if (
 
 <head>
     <title>Register - Leafora</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -111,6 +112,39 @@ if (
         .bottom-text a:hover {
             text-decoration: underline;
         }
+
+        * { box-sizing: border-box; }
+
+body {
+  min-height: 100vh;  /* height ki jagah min-height */
+  padding: 20px;      /* mobile par chipkne se bachao */
+}
+
+.form-control {
+  font-size: 16px !important; /* iPhone zoom fix */
+  padding: 12px !important;
+}
+
+.btn-custom {
+  font-size: 16px !important;
+  padding: 12px !important;
+}
+
+@media (max-width: 480px) {
+  .container-box {
+    padding: 10px;
+  }
+
+  .card-box {
+    padding: 25px 18px;
+    border-radius: 12px;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
+}
     </style>
 
 </head>

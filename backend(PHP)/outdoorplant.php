@@ -485,58 +485,147 @@ margin-bottom:10px;
   transform: scale(1.05);
 }
 </style>
-<body>
-<header class="header">
-  <a href="index.html" class="logo">
-    <img src="../images/logo2-removebg-preview.png" alt="Leafora Logo">
-  </a>
-
-  <nav class="main-menu">
-    <a href="plant.php" class="home-link"><i class="bi bi-house"></i></a>
-    
-    <div class="dropdown">
-      <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">PLANTS</button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="indoorplant.php">Indoor Plants</a></li>
-        <li><a class="dropdown-item" href="outdoorplant.php">Outdoor Plants</a></li>
-      </ul>
-    </div>
-
-    <div class="dropdown">
-      <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">SEEDS</button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="flowerseed.php">Flower Seeds</a></li>
-        <li><a class="dropdown-item" href="vegetableseed.php">Vegetable Seeds</a></li>
-      </ul>
-    </div>
-
-    <div class="dropdown">
-      <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">GARDEN DECOR</button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="bird.php">Bird Houses</a></li>
-        <li><a class="dropdown-item" href="garden.php">Garden Tools</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="header-icons">
-   <a href="#" onclick="openSearch()"><i class="bi bi-search"></i></a>
-    <a href="contact.php"><i class="bi bi-person"></i></a>
-     <a href="javascript:void(0);" onclick="openCart()" class="cart-wrapper">
-  <i class="bi bi-cart fs-4"></i>
-
 <?php
 include("db.php");
 global $conn;
 $count_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM cart");
 $count_data = mysqli_fetch_assoc($count_query);
 ?>
+<body>
+<header class="header" style="height:auto; padding:10px 20px;">
+  <div class="d-flex justify-content-between align-items-center w-100">
+    
+    <!-- Logo -->
+    <a href="plant.php" class="logo">
+      <img src="../images/logo2-removebg-preview.webp" alt="Leafora Logo" style="height:60px;">
+    </a>
 
-<span id="cart-count">
-    <?= $count_data['total']; ?>
-</span>
-</a></i>
-<?php include("navbar.php"); ?>
+    <!-- Hamburger (only mobile) -->
+    <button onclick="toggleHamburger()" class="d-md-none"
+      style="background:none;border:1px solid white;color:white;padding:5px 12px;border-radius:6px;font-size:20px;cursor:pointer;">
+      ☰
+    </button>
+
+    <!-- Desktop Menu -->
+    <nav class="main-menu d-none d-md-flex">
+      <a href="plant.php" class="home-link"><i class="bi bi-house"></i></a>
+
+      <div class="dropdown">
+        <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">PLANTS</button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="indoorplant.php">Indoor Plants</a></li>
+          <li><a class="dropdown-item" href="outdoorplant.php">Outdoor Plants</a></li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
+        <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">SEEDS</button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="flowerseed.php">Flower Seeds</a></li>
+          <li><a class="dropdown-item" href="vegetableseed.php">Vegetable Seeds</a></li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
+        <button class="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown">GARDEN DECOR</button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="bird.php">Bird Houses</a></li>
+          <li><a class="dropdown-item" href="garden.php">Garden Tools</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Desktop Icons -->
+    <div class="header-icons d-none d-md-flex">
+      <a href="#" onclick="openSearch()"><i class="bi bi-search"></i></a>
+      <a href="contact.php"><i class="bi bi-person"></i></a>
+      <a href="javascript:void(0);" onclick="openCart()" class="cart-wrapper">
+        <i class="bi bi-cart fs-4"></i>
+        <span id="cart-count"><?= $count_data['total']; ?></span>
+      </a>
+      <?php include("navbar.php"); ?>
+    </div>
+
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mainMenu" style="display:none; background:#1d3124; padding:15px; border-radius:10px; margin-top:10px; position:relative; z-index:100;">
+
+    <!-- Plants -->
+    <div style="border-bottom:1px solid #345c3c; margin-bottom:5px;">
+      <button onclick="toggleMobileMenu('sub-plants', this)"
+        style="background:none;border:none;color:white;font-weight:bold;width:100%;text-align:left;padding:10px 0;font-size:15px;cursor:pointer;">
+        🌿 PLANTS <span style="float:right;">▼</span>
+      </button>
+      <div id="sub-plants" style="display:none; padding:5px 0 10px 15px;">
+        <a href="indoorplant.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Indoor Plants</a>
+        <a href="outdoorplant.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Outdoor Plants</a>
+      </div>
+    </div>
+
+    <!-- Seeds -->
+    <div style="border-bottom:1px solid #345c3c; margin-bottom:5px;">
+      <button onclick="toggleMobileMenu('sub-seeds', this)"
+        style="background:none;border:none;color:white;font-weight:bold;width:100%;text-align:left;padding:10px 0;font-size:15px;cursor:pointer;">
+        🌱 SEEDS <span style="float:right;">▼</span>
+      </button>
+      <div id="sub-seeds" style="display:none; padding:5px 0 10px 15px;">
+        <a href="flowerseed.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Flower Seeds</a>
+        <a href="vegetableseed.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Vegetable Seeds</a>
+      </div>
+    </div>
+
+    <!-- Decor -->
+    <div style="border-bottom:1px solid #345c3c; margin-bottom:5px;">
+      <button onclick="toggleMobileMenu('sub-decor', this)"
+        style="background:none;border:none;color:white;font-weight:bold;width:100%;text-align:left;padding:10px 0;font-size:15px;cursor:pointer;">
+        🏡 GARDEN DECOR <span style="float:right;">▼</span>
+      </button>
+      <div id="sub-decor" style="display:none; padding:5px 0 10px 15px;">
+        <a href="bird.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Bird Houses</a>
+        <a href="garden.php" style="display:block;color:#9dd4a7;padding:5px 0;text-decoration:none;">Garden Tools</a>
+      </div>
+    </div>
+
+    <!-- Mobile Icons -->
+    <div style="display:flex; flex-wrap:wrap; gap:12px; padding-top:14px; border-top:1px solid #345c3c;">
+
+      <span onclick="openSearch()"
+        style="color:white;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:4px;">
+        <i class="bi bi-search"></i> Search
+      </span>
+
+      <span onclick="openCart()"
+        style="color:white;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:4px;position:relative;">
+        <i class="bi bi-cart"></i> Cart
+        <span id="cart-count-mobile"
+          style="background:#ff4d4d;color:white;font-size:10px;padding:2px 5px;
+                 border-radius:50%;position:absolute;top:-8px;right:-8px;">
+          <?= $count_data['total']; ?>
+        </span>
+      </span>
+
+      <a href="wishlist.php"
+        style="color:white;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;">
+        <i class="bi bi-heart"></i> Wishlist
+      </a>
+
+      <a href="contact.php"
+        style="color:white;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;">
+        <i class="bi bi-person"></i> Profile
+      </a>
+
+      <a href="order_history.php"
+        style="color:white;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;">
+        <i class="bi bi-clock-history"></i> Orders
+      </a>
+
+      <a href="logout.php"
+        style="color:#ff6b6b;text-decoration:none;font-size:13px;font-weight:bold;display:flex;align-items:center;gap:4px;">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </a>
+
+    </div>
   </div>
 </header>
 <!-- header complete -->
@@ -892,13 +981,17 @@ function removeItem(id) {
 }
 
 function updateCartCount() {
-    fetch("cart_count.php")
-        .then(res => res.text())
-        .then(count => {
-            document.getElementById("cart-count").innerText = count;
-        });
+  fetch("cart_count.php")
+    .then(res => res.text())
+    .then(count => {
+      count = count.trim();
+      var d = document.getElementById("cart-count");
+      var m = document.getElementById("cart-count-mobile");
+      if (d) d.innerText = count;
+      if (m) m.innerText = count;
+    })
+    .catch(err => console.log("Count error:", err));
 }
-
 window.addEventListener("load", function () {
     loadCart();
     updateCartCount();
@@ -941,6 +1034,22 @@ function decreaseQty(id){
         loadCart();
         updateCartCount();
     });
+}
+function toggleHamburger() {
+  var menu = document.getElementById("mainMenu");
+  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+
+function toggleMobileMenu(id, btn) {
+  var el = document.getElementById(id);
+  var arrow = btn.querySelector("span");
+  if (el.style.display === "block") {
+    el.style.display = "none";
+    if (arrow) arrow.textContent = "▼";
+  } else {
+    el.style.display = "block";
+    if (arrow) arrow.textContent = "▲";
+  }
 }
 </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

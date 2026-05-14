@@ -31,6 +31,8 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <meta charset="UTF-8">
 <title>Login</title>
 
@@ -38,107 +40,151 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #0f1a12, #0b1410);
+   margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f1a12, #0b1410);
+  padding: 15px;
 }
 
-/* Card */
 .login-card {
-    width: 100%;
-    max-width: 420px;
-    padding: 40px 30px;
-    border-radius: 18px;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 30px;
+  border-radius: 18px;
+  background: #121f16;
+  border: 1px solid rgba(76, 175, 80, 0.25);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
 
-    background: #121f16;
-    border: 1px solid rgba(76, 175, 80, 0.25);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+/* Mobile - chhoti screen par padding kam karo */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 20px;
+    border-radius: 14px;
+    max-width: 100%;        /* poori width le lo */
+    margin: 0;
+  }
+
+  .brand {
+    font-size: 28px;        /* bada karo */
+  }
+
+  .subtitle {
+    font-size: 15px;        /* bada karo */
+  }
+
+  .form-control {
+    font-size: 16px;
+    padding: 14px;          /* touch ke liye bada */
+  }
+
+  .btn-custom {
+    padding: 14px;          /* button bada */
+    font-size: 17px;
+  }
+
+  .login-card h5 {
+    font-size: 20px;        /* heading bada */
+  }
+
+  .login-card p {
+    font-size: 15px;
+  }
 }
-.login-card h5{
-    color: #90d9a0;
+
+.login-card h5 {
+  color: #90d9a0;
 }
-.login-card p{
-    color: #cfe8d2;
+
+.login-card p {
+  color: #cfe8d2;
 }
-/* Title */
+
 .brand {
-    text-align: center;
-    font-size: 30px;
-    font-weight: 800;
-    color: #7dff9a;   /* lighter neon green */
-    letter-spacing: 2px;
-    margin-bottom: 5px;
+  text-align: center;
+  font-size: clamp(22px, 6vw, 30px); /* mobile par chhota */
+  font-weight: 800;
+  color: #7dff9a;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
 }
 
-/* Subtitle */
 .subtitle {
-    text-align: center;
-    color: #cfe8d2;   /* lighter text */
-    font-size: 14px;
-    margin-bottom: 25px;
+  text-align: center;
+  color: #cfe8d2;
+  font-size: clamp(12px, 3vw, 14px);
+  margin-bottom: 25px;
 }
 
-/* Inputs */
 .form-control {
-    border-radius: 10px;
-    padding: 12px;
-    background: #0e1a12;
-    border: 1px solid #2e7d32;
-    color: #eafbea;   /* lighter input text */
-    transition: 0.2s;
+  border-radius: 10px;
+  padding: 12px;
+  background: #0e1a12;
+  border: 1px solid #2e7d32;
+  color: #eafbea;
+  transition: 0.2s;
+  font-size: 16px; /* iOS zoom fix - 16px se zoom nahi hoga */
+  width: 100%;
 }
 
 .form-control::placeholder {
-    color: #9fb9a6;
+  color: #9fb9a6;
 }
 
 .form-control:focus {
-    border-color: #7dff9a;
-    box-shadow: 0 0 0 0.2rem rgba(125,255,154,0.2);
-    background: #0e1a12;
-    color: #ffffff;
+  border-color: #7dff9a;
+  box-shadow: 0 0 0 0.2rem rgba(125,255,154,0.2);
+  background: #0e1a12;
+  color: #ffffff;
+  outline: none;
 }
 
-/* Button */
 .btn-custom {
-    background: #2e7d32;
-    color: #ffffff;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: 600;
-    border: none;
-    transition: 0.3s;
+  background: #2e7d32;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: none;
+  transition: 0.3s;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .btn-custom:hover {
-    background: #43a047;
+  background: #43a047;
 }
 
-/* Links */
-a  {
-    color: #9fffb3;
-    text-decoration: dotted;
+a {
+  color: #9fffb3;
+  text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-/* Error */
 .alert {
-    border-radius: 10px;
-    font-size: 14px;
-    text-align: center;
-    background: rgba(183, 28, 28, 0.15);
-    color: #ffb3b3;
-    border: 1px solid rgba(255, 100, 100, 0.4);
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+  background: rgba(183, 28, 28, 0.15);
+  color: #ffb3b3;
+  border: 1px solid rgba(255, 100, 100, 0.4);
+  padding: 10px;
+  margin-bottom: 15px;
 }
-
 
 </style>
 </head>
