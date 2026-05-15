@@ -14,7 +14,6 @@
   <link rel="icon" type="image/x-icon" href="logo2-removebg-preview.png">
 
   <style>
-
   #toast {
   transform: translateY(20px);
 }
@@ -843,6 +842,8 @@ transform:translateX(5px);
     font-size: 30px !important;
   }
 }
+/*  */
+
 </style>
 </head>
 
@@ -1686,6 +1687,8 @@ function toggleMobileMenu(id, btn) {
 }
 
 </script>
+
+
 </body>
 </html>
 
