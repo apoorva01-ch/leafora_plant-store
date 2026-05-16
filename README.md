@@ -5,7 +5,7 @@ plants online. It includes a complete customer-facing shopping experience along 
 fully functional admin panel for managing the entire store — products, orders, users, 
 and customer messages.
 
-**Live Site:** [[add your live link here](https://leafora.infinityfreeapp.com/)]
+**Live Site:** [(https://leafora.infinityfreeapp.com/)]
 
 
 ## Table of Contents
@@ -34,7 +34,7 @@ built using Bootstrap.
 
 The project is deployed and accessible online.
 
-Live URL: [[add your live link here]](https://leafora.infinityfreeapp.com/)
+Live URL: [(https://leafora.infinityfreeapp.com/)]
 
 
 ## Features
